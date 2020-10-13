@@ -1,0 +1,25 @@
+ if(cmd === `${prefix}ban`){
+        const Reason = messageArray.slice(2, 99)
+        const target = Discord.MessageMentions.users.first()
+        const targetID = message.guild.members.cache.get(target.id)
+        if(!message.member.hasPermission("BAN_MEMBERS")){
+            message.channel.send("You require permission BAN_MEMBERS to ban somebody!")
+        }else {
+            if(args[1]){
+                message.channel.send(`You must mention somebody to ban! (${prefix}ban @dummy#0000 [Reason] )`)
+            }else {
+                if(!Discord.MessageMentions){
+                    message.channel.send(`That's not a valid mention! (${prefix}ban @dummy#0000 [Reason] )`)
+                }else {
+                    if(targetID.bannable) targetID.ban
+                    const banembed = new Discord.MessageEmbed()
+                    .setTitle("User has been succesfully banned!")
+                    .addField({Name: `<@${targetID}> Has been banned by ${message.author.tag}` ,
+                        value: `Reason = ${Reason}` })
+
+                    message.channel.send(banembed)
+
+                }
+            }
+        }
+    }

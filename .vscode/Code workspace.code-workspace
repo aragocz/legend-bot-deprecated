@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"name": "Discord Bot",
+			"path": ".."
+		},
+		{
+			"name": "Web",
+			"path": "..\\..\\Složky\\Web"
+		},
+		{
+			"name": "Testkvappy",
+			"path": "..\\..\\Testkvappy"
+		},
+		{
+			"name": "Webpage Multimedia",
+			"path": "..\\..\\..\\Documents\\Webpage Multimedia"
+		}
+	],
+	"settings": {
+		"discord.enabled": true
+	}
+}

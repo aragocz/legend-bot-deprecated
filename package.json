@@ -1,0 +1,20 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ShadowŁegend#8496",
+  "license": "ISC",
+  "dependencies": {
+    "discord-giveaways": "^4.2.1",
+    "discord.js": "^12.2.0",
+    "eslint": "7.4.0",
+    "opusscript": "0.0.7",
+    "quick.db": "^7.1.1",
+    "timer": "^1.0.1",
+    "ytdl-core": "^3.1.2"
+  }
+}

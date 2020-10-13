@@ -1,0 +1,6 @@
+//načíst složky
+const cmdFiles = readdirSync(join(__dirname, "Commands")).filter(file => file.endsWith(".js"))
+for (const file of cmdFiles) {
+  const command = require(join(__dirname, "Commands", file))
+  client.commands.set(command.name, command)
+} 
