@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const botsettings = require('./botsettings.json')
+const fs = require('fs');
 const bot = new Discord.Client
 const guild = Discord.Guild
 const prefix = botsettings.prefix;
@@ -17,6 +18,8 @@ const version = botsettings.version;
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
 const defaultStatus = "Made By : Furuhashi Fumino#8496 | l?"
 const index = require("./index.js")
+const moment = require("./node_modules/moment/moment.min.js");
+
 
 
 
@@ -55,6 +58,10 @@ bot.on("message" , async message => {
     let version = botsettings.version;
 
 
+
+    if(cmd === `${prefix}test`){
+        Test.js
+    }
     
 
     if(cmd === `${prefix}ping`){
@@ -185,9 +192,9 @@ bot.on("message" , async message => {
             {name: `Last message:`,
             value: `${message.author.lastMessage + 1}`},
             {name: `Joined this server:`,
-             value: `${message.guild.joinedAt}`},
+             value: `${moment(message.author.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
             {name: `Account created:`,
-             value: `${message.author.createdAt}`},
+             value: `${moment(message.author.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`},
         )
         
         
@@ -275,8 +282,12 @@ bot.on("message" , async message => {
             value: `**${message.guild.memberCount}**`
          },
          {
+            name: '🍰Created At:',
+            value: `${moment(message.guild.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`
+         },
+         {
             name: '🧻Roles:',
-            value: `**${message.guild.roles.cache.size - 1}**`
+            value: `**${message.guild.roles.cache.size}**`
          },
          {
             name: '🏠Rooms:',
@@ -391,7 +402,7 @@ bot.on("message" , async message => {
             message.channel.send("***You must actually put in a prefix you want to set !*** \nPrefix was reset to default: **l?**)")
             db.set('Prefix', { Prefix: `l?`})
         }else if(args = 1){
-            db.set('Prefix', `${args}`)
+            db.set('Prefix', `${args[1]}`)
             const prembed = new Discord.MessageEmbed()
             .setTitle('<:LGNDdone:733772584918843463> Custom Prefix Succesfuly set ! <:LGNDdone:733772584918843463>')
             .addField('New prefix:' , db.get('Prefix.Prefix'));
@@ -426,7 +437,7 @@ bot.on("message" , async message => {
                 }
             ] 
         })
-        if(!args === 'inf'){
+        if(!args[1] === 'inf'){
             const fetchedChannel = message.guild.channels.find(r => r.name === `${message.author.username}'s temporary text channel`);
       
             setTimeout( function() {

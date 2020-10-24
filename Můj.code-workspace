@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "Discord Bot",
+			"path": "."
+		},
+		{
+			"name": "Web",
+			"path": "..\\..\\Desktop\\Složky\\Web"
+		},
+		{
+			"name": "Webpage Multimedia",
+			"path": "..\\..\\Documents\\Webpage Multimedia"
+		},
+		{
+			"name": "MMT BOT",
+			"path": "..\\..\\Documents\\MMT BOT"
+		},
+		{
+			"name": "Blbosti v VSC",
+			"path": "..\\..\\Documents\\Blbosti v VSC"
+		}
+	],
+	"settings": {}
+}
