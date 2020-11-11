@@ -16,7 +16,7 @@ const { error } = require('console');
 const { get } = require('http');
 const version = botsettings.version;
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
-const defaultStatus = "Made By : Furuhashi Fumino#8496 | l?"
+const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "Furuhashi is no longer an owner, bot moved to Łegend Developers team!"
 const index = require("./index.js")
 const moment = require("./node_modules/moment/moment.min.js");
 
