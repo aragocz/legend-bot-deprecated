@@ -4,25 +4,9 @@ const fs = require('fs');
 const bot = new Discord.Client
 const guild = Discord.Guild
 const prefix = botsettings.prefix;
-const ytdl = require('ytdl-core');
-const { getInfo } = require('ytdl-core');
-const { isBuffer, formatWithOptions } = require('util');
-const { url } = require('inspector');
-const { URL } = require('url');
-const { TIMEOUT } = require('dns');
-const { Giveaway } = require('discord-giveaways');
 const db = require('quick.db');
-const { error } = require('console');
-const { get } = require('http');
-const version = botsettings.version;
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
 const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "Furuhashi is no longer an owner, bot moved to Łegend Developers team!"
-const index = require("./index.js")
-const moment = require("./node_modules/moment/moment.min.js");
-
-
-
-
 
 
 
