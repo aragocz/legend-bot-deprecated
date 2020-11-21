@@ -7,30 +7,56 @@ module.exports = {
     name: 'user-info',
     description: "Shows info about a user.",
     execute(message, args){
+        const muser = message.mentions.users.first();
         if(message.deletable) message.delete()
-        Uembed.setTitle(`${message.author.tag}'s information. `)
-        Uembed.setColor(randomcolor)
-        Uembed.setAuthor(message.author.tag , message.author.displayAvatarURL())
-        Uembed.setThumbnail(message.author.avatarURL())
-        Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL())
-        Uembed.addFields(
-            {name: `Username:`,
-             value: `${message.author.username}`,
-            inline: true },
-            {name: `Tag:`,
-             value: `${message.author.discriminator}`,
-            inline: true},
-            {name: `ID:`,
-             value: `${message.author.id}`},
-            {name: `Last message:`,
-            value: `${message.author.lastMessage + 1}`},
-            {name: `Joined this server:`,
-             value: `${moment(message.member.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
-            {name: `Account created:`,
-             value: `${moment(message.author.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`},
-        );
+        if(!message.mentions.users.first()){
+            Uembed.setTitle(`Your information.`)
+            Uembed.setColor(randomcolor)
+            Uembed.setAuthor(message.author.tag , message.author.displayAvatarURL())
+            Uembed.setThumbnail(message.author.avatarURL())
+            Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL())
+            Uembed.addFields(
+                {name: `Username:`,
+                value: `${message.author.username}`,
+                inline: true },
+                {name: `Tag:`,
+                value: `${message.author.discriminator}`,
+                inline: true},
+                {name: `ID:`,
+                value: `${message.author.id}`},
+                {name: `Last message:`,
+                value: `${message.author.lastMessage + 1}`},
+                {name: `Joined this server:`,
+                value: `${moment(message.member.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
+                {name: `Account created:`,
+                value: `${moment(message.author.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`},
+            );
+        }else {
+            Uembed.setTitle(`${muser.tag}'s information. `)
+            Uembed.setColor(randomcolor)
+            Uembed.setAuthor(muser.tag , muser.displayAvatarURL({dynamic: true}))
+            Uembed.setThumbnail(muser.avatarURL({dynamic: true}))
+            Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL({dynamic: true}))
+            Uembed.addFields(
+                {name: `Username:`,
+                value: `${muser.username}`,
+                inline: true },
+                {name: `Tag:`,
+                value: `${muser.discriminator}`,
+                inline: true},
+                {name: `ID:`,
+                value: `${muser.id}`},
+                {name: `Last message:`,
+                value: `${muser.lastMessage + 1}`},
+                {name: `Joined this server:`,
+                value: `${moment(muser.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
+                {name: `Account created:`,
+                value: `${moment(muser.createdAt).format("MMMM Do YYYY, h:mm:ss a")}`},
+            );
+        }
         
         message.channel.send(Uembed)
         .then(m => m.delete({timeout: 60000}))
+        Uembed.fields = [];
     }
 }

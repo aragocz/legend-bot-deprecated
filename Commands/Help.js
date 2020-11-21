@@ -3,7 +3,7 @@ const Hembed = new Discord.MessageEmbed();
 
 
 module.exports = {
-    name: 'Help',
+    name: 'help',
     description: "Help, shows commands.",
     execute(message, args){
         if(message.deletable) message.delete
@@ -29,5 +29,6 @@ module.exports = {
        Hembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL());
        
        message.channel.send(Hembed);
+       Hembed.fields = [];
     }
 }

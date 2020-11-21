@@ -2,7 +2,7 @@ const Discord = require('discord.js')
 const Bembed = new Discord.MessageEmbed()
     
     module.exports = {
-        name: 'Bots',
+        name: 'bots',
         description: "Bots you should check out too :D",
         execute(message, args){
             Bembed.setColor("#db1428")
@@ -15,5 +15,6 @@ const Bembed = new Discord.MessageEmbed()
             );
 
             message.channel.send(Bembed)
+            Bembed.fields = [];
         }
     }

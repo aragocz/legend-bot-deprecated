@@ -15,7 +15,7 @@ module.exports = {
                     allow: ['VIEW_CHANNEL']
                 }
             ])
-            embed.setTitle("<a:LGNDhide:776050575174795334> Succesfully Unhid <a:LGNDhide:776050575174795334>")
+            embed.setTitle("<a:LGNDunhide:776201731268542474> Succesfully Unhid <a:LGNDunhide:776201731268542474>")
             embed.setDescription(`Succesfully unhid channel **${message.channel}**`)
             embed.setFooter(`Unhid by ${message.author.tag}`, message.author.displayAvatarURL({dynamic: true}))
             embed.setColor('#00ff00')

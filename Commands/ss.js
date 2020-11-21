@@ -5,7 +5,7 @@ module.exports = {
     name: 'ss',
     description: "SetStatus",
     execute(message, args, bot){
-        if(message.author.id === `428984613935775765`){
+        if(message.author.id === `428984613935775765` || message.author.id === `484448041609199620`){
             if(message.deletable) message.delete()
             
             let IDK = args.join(" ")
@@ -16,11 +16,12 @@ module.exports = {
             );
             
 
-            console.log(`Status set : ${IDK}`)
+            console.log(`${message.author.username} set status : ${IDK}`)
 
             message.channel.send(ss);
+            ss.fields = [];
         }else{
-            message.reply("`Only Bot owner can change it's status!`")
+            message.reply("`Only Bot owners can change it's status!`")
         }
     }
 }
