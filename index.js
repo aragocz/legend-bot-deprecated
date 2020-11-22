@@ -44,6 +44,7 @@ bot.on('guildMemberAdd', async member => {
 
 bot.on('guildCreate', async guild => {
     const general = member.guild.channels.cache.find(r => r.name === 'general')
+    db.set(`welcome_${guild.id}`)
     general.send('')
 })
 
@@ -273,6 +274,27 @@ bot.on("message" , async message => {
         message.author.send('You just found the secret code, don\'t you dare to say it to someone, dm me Furuhashi Fumino#8496 .').then(m => m.delete({timeout: 10000}))
     }
     
+    if(cmd === `${prefix}welcome-message`){
+        const embed = new Discord.MessageEmbed()
+        .setTitle('Welcome message')
+        .setDescription(`Add **true** or **false** statement to turn on/off welcome message.`)
+        .addField('Welcome message state:', `${db.get(`welcome_${message.guild.id}`)}`)
+        if(message.member.hasPermission('ADMINISTRATOR')){
+            if(args[0]){
+                message.channel.send
+            }else if(args === 'true'){
+                db.set(`welcome_${message.guild.id}`, 'true')
+                message.channel.send('Succesfully set welcome message to **true**.')
+            }else if(args === 'false'){
+                db.set(`welcome_${message.guild.id}`, 'false')
+                message.channel.send('Succesfully set welcome message to **true**.')
+            }else{
+                message.reply(`That\'s not a valid statement! write \`${prefix}welcome-message\` to show all options.`)
+            }
+        }else {
+            message.reply('You require permission `ADMINISTRATOR` to manage guild bot settings.')
+        }
+    }
 })
 
 
