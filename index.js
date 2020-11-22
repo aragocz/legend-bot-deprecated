@@ -137,17 +137,15 @@ bot.on("message" , async message => {
     
 
     if(cmd === `${prefix}msg`){
-        if(message.deletable) message.delete();
-        const Text = args.join(" ")
-        message.channel.send(Text)
+        bot.commands.get('msg').execute(message, args)
     }
 
-    if(cmd === `${prefix}prefixdebug`){
+   /* if(cmd === `${prefix}prefixdebug`){
         if(message.member.hasPermission("ADMINISTRATOR")){
             db.set('Prefix', { Prefix: `l?`})
             message.channel.send('Done!')
         }
-    }
+    }*/
 
     if(cmd === `${prefix}setup`){
         
