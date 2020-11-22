@@ -36,7 +36,8 @@ bot.on('ready' , async () => {
 })  
 
 bot.on('guildMemberAdd', async member => {
-    if(member.guild.id === '725406766959165501'){
+    let welcome = db.get(`welcome_${member.guild.id}`)
+    if(welcome.msg === 'true'){
         const welcome = member.guild.channels.cache.find(r => r.name === 'welcome')
         welcome.send(`${member} Has joined !`)
     }
@@ -141,23 +142,6 @@ bot.on("message" , async message => {
         message.channel.send(Text)
     }
 
-    /*if(cmd === `${prefix}setprefix`){
-        if(args = 0){
-            message.channel.send("***You must actually put in a prefix you want to set !*** \nPrefix was reset to default: **l?**)")
-            db.set('Prefix', { Prefix: `l?`})
-        }else if(args = 1){
-            db.set('Prefix', `${args[1]}`)
-            const prembed = new Discord.MessageEmbed()
-            .setTitle('<:LGNDdone:733772584918843463> Custom Prefix Succesfuly set ! <:LGNDdone:733772584918843463>')
-            .addField('New prefix:' , db.get('Prefix.Prefix'));
-
-            message.channel.send(prembed)
-            
-        }else if(args > 1){
-            message.channel.send('You need to provide only one argument, no more, no less.')
-        }
-    }*/
-
     if(cmd === `${prefix}prefixdebug`){
         if(message.member.hasPermission("ADMINISTRATOR")){
             db.set('Prefix', { Prefix: `l?`})
@@ -187,58 +171,18 @@ bot.on("message" , async message => {
         
     }
 
-    if(cmd === `${prefix}ticket`){
-        
-        try {
-            let embed = new Discord.MessageEmbed()
-                .setTitle(args)
-                .setDescription("React to 📩 to create ticket!")
-                .setColor('#20c9b0');
-                
-            message.channel.send(embed)
-            db.add('Ticket' , 1)
-            
-            message.guild.channels.create(`Ticket ${db.get('Ticket')}`,{type: 'text'})
-            
-        } catch(err) {
-            console.log(err);
-        }
-        
-    }
-
     if(cmd === `${prefix}afk`){
         let modargs = args.join(" ")
         let content = db.get(`test_${message.author.id}.afkstatus`)
         let afk = db.get(`afk_${message.author.id}`)
         db.set(`afk_${message.author.id}`,{ afk: 'afk' })
         db.set(`test_${message.author.id}`,{ afkstatus: modargs })
-        message.channel.send(`Successfully set your AFK message to \`${content}\`. Write ${prefix}unafk to turn of mention message!`).then(m => m.delete({timeout: 1}))
-        message.channel.send(`Successfully set your AFK message to \`${content}\`. Write ${prefix}unafk to turn of mention message!`).then(m => m.delete({timeout: 60000}))
+        message.channel.send(`Successfully set your AFK message to \`${modargs}\`. Write ${prefix}unafk to turn of mention message!`).then(m => m.delete({timeout: 60000}))
     }
 
     if(cmd === `${prefix}unafk`){
         db.set(`afk_${message.author.id}`,{ afk: 'notafk' })
         message.reply('Set you as not AFK!')
-    }
-
-    if(cmd === `${prefix}dbget`){
-        let afk = db.get(`afk_${message.author.id}.afk`)
-        let content = db.get(`test_${message.author.id}.afkstatus`)
-        if(afk === 'afk'){
-            message.channel.send(content).then(m => m.delete({timeout: 60000}))
-        }else if(afk === 'notafk'){
-            message.channel.send('Not AFK')
-        }else {
-            const adalbert = '484448041609199620'
-            const furuhashi = '428984613935775765'
-            const furuhashicontact = bot.users.cache.get(furuhashi)
-            const adalbertcontact = bot.users.cache.get(adalbert)
-            message.reply(`Error, A-T should be here shortly. Thank you for your patience \n-Furuhashi`)
-            furuhashicontact.send(`Fatal error at **${message.guild.name}** in channel **${message.channel}**`)
-            //adalbertcontact.send(`Fatal error at **${message.guild.name}** in channel **${message.channel}**`)
-            
-        }
-        
     }
 
     if(cmd === `${prefix}lockdown`){
@@ -258,7 +202,7 @@ bot.on("message" , async message => {
     }
 
     if(cmd === `${prefix}distancing` || cmd === `${prefix}slowmode`){
-    bot.commands.get('slowmode').execute(message, args)
+        bot.commands.get('slowmode').execute(message, args)
     }
 
     if(message.mentions.members.size){
@@ -268,25 +212,20 @@ bot.on("message" , async message => {
             message.channel.send(`${muser} is AFK : ${afkmsg}`)
         }
     }
-
-    if(cmd === '285827619358'){
-        if(message.deletable) message.delete()
-        message.author.send('You just found the secret code, don\'t you dare to say it to someone, dm me Furuhashi Fumino#8496 .').then(m => m.delete({timeout: 10000}))
-    }
     
     if(cmd === `${prefix}welcome-message`){
         const embed = new Discord.MessageEmbed()
         .setTitle('Welcome message')
         .setDescription(`Add **true** or **false** statement to turn on/off welcome message.`)
-        .addField('Welcome message state:', `${db.get(`welcome_${message.guild.id}`)}`)
+        .addField('Welcome message state:', `${db.get(`welcome_${message.guild.id}.msg`)}`)
         if(message.member.hasPermission('ADMINISTRATOR')){
             if(args[0]){
                 message.channel.send
             }else if(args === 'true'){
-                db.set(`welcome_${message.guild.id}`, 'true')
+                db.set(`welcome_${message.guild.id}`, {msg: 'true'})
                 message.channel.send('Succesfully set welcome message to **true**.')
             }else if(args === 'false'){
-                db.set(`welcome_${message.guild.id}`, 'false')
+                db.set(`welcome_${message.guild.id}`, {msg: 'false'})
                 message.channel.send('Succesfully set welcome message to **true**.')
             }else{
                 message.reply(`That\'s not a valid statement! write \`${prefix}welcome-message\` to show all options.`)
