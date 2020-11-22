@@ -14,7 +14,7 @@ module.exports = {
        Hembed.setDescription('List of commands')
        Hembed.addFields(
             { name: '<:LGNDgeneral:730937158193381446> **General**' ,
-            value: '`help`,`invite`,`version`,`ping`,`support`,`prefix`,`bots`,`user-info`,`ui`,' },
+            value: '`help`,`invite`,`ping`,`prefix`,`bots`,`user-info`/`ui`,`afk`,`unafk`,`avatar`,`stats`' },
             { name: '<a:LGNDmusic:731104463598649424>**Music**' ,
             value: '*Coming soon...*'},
             { name: '<:LGNDfun:741924956241133629>**Fun**',
@@ -22,7 +22,7 @@ module.exports = {
             { name: '<:LGNDmoderation:734420264493908038>**Moderation**',
             value: '`purge`,`lockdown`,`unlock`,`hide`,`unhide`,`slowmode`,``'},
             { name: '<:LGNDadmins:731102561628586015>**Bot Administrators**' ,
-            value: '`servers`'},
+            value: '`servers`,`ss`'},
           
         
         )

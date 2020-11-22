@@ -127,10 +127,6 @@ bot.on("message" , async message => {
         bot.commands.get('purge').execute(message, args)
     }
 
-    
-    
-        
-    
     if(cmd === `${prefix}complexembed`){
         bot.commands.get('complexembed').execute(message, args)
     }

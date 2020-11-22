@@ -6,8 +6,8 @@ module.exports = {
     execute(message, args){
         const pingembed = new Discord.MessageEmbed()
        .setTitle(`Pong, Im faster than you.`)
-       .addFields({Name: "My ping is:" ,
-        Value: `\`${Math.floor(Date.now() - message.createdTimestamp)}\`ms`});
+       .addFields({name: "My ping is:" ,
+        value: `\`${Math.floor(Date.now() - message.createdTimestamp)}\`ms`});
 
         message.channel.send(pingembed)
         pingembed.fields = [];
