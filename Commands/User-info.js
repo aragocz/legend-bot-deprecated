@@ -12,9 +12,9 @@ module.exports = {
         if(!message.mentions.users.first()){
             Uembed.setTitle(`Your information.`)
             Uembed.setColor(randomcolor)
-            Uembed.setAuthor(message.author.tag , message.author.displayAvatarURL())
-            Uembed.setThumbnail(message.author.avatarURL())
-            Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL())
+            Uembed.setAuthor(message.author.tag , message.author.displayAvatarURL({dynamic: true}))
+            Uembed.setThumbnail(message.author.avatarURL({dynamic: true}))
+            Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL({dynamic: true}))
             Uembed.addFields(
                 {name: `Username:`,
                 value: `${message.author.username}`,
