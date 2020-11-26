@@ -8,6 +8,7 @@ module.exports = {
     description: "Shows info about a user.",
     execute(message, args){
         const muser = message.mentions.users.first();
+        const memberuser = message.mentions.members.first();
         if(message.deletable) message.delete()
         if(!message.mentions.users.first()){
             Uembed.setTitle(`Your information.`)
@@ -24,8 +25,8 @@ module.exports = {
                 inline: true},
                 {name: `ID:`,
                 value: `${message.author.id}`},
-                {name: `Last message:`,
-                value: `${message.author.lastMessage + 1}`},
+                {name: `Highest Role:`,
+                value: `${message.member.roles.highest}`},
                 {name: `Joined this server:`,
                 value: `${moment(message.member.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
                 {name: `Account created:`,
@@ -46,8 +47,8 @@ module.exports = {
                 inline: true},
                 {name: `ID:`,
                 value: `${muser.id}`},
-                {name: `Last message:`,
-                value: `${muser.lastMessage + 1}`},
+                {name: `Highest Role:`,
+                value: `${memberuser.roles.highest}`},
                 {name: `Joined this server:`,
                 value: `${moment(muser.joinedAt).format("MMMM Do YYYY, h:mm:ss a")}`},
                 {name: `Account created:`,
