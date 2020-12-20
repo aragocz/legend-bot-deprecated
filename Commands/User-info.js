@@ -36,7 +36,7 @@ module.exports = {
             Uembed.setTitle(`${muser.tag}'s information. `)
             Uembed.setColor(randomcolor)
             Uembed.setAuthor(muser.tag , muser.displayAvatarURL({dynamic: true}))
-            Uembed.setThumbnail(muser.avatarURL({dynamic: true}))
+            Uembed.setThumbnail(muser.displayAvatarURL({dynamic: true}))
             Uembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL({dynamic: true}))
             Uembed.addFields(
                 {name: `Username:`,

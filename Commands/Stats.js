@@ -48,6 +48,8 @@ module.exports = {
          },
         )
 
-        message.channel.send(stateembed)
+        message.channel.send(stateembed).then(m => m.delete({timeout: 60000}))
+   
+        stateembed.fields = [];
     }
 }

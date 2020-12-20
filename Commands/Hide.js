@@ -17,7 +17,7 @@ module.exports = {
             ])
             embed.setTitle("<a:LGNDhide:776050575174795334> Succesfully Hid <a:LGNDhide:776050575174795334>")
             embed.setDescription(`Succesfully hid channel **${message.channel}**`)
-            embed.setFooter(`Hidden by ${message.author.tag}`, message.author.displayAvatarURL({dynamic: true}))
+            embed.setFooter(`Hidden by ${message.author.tag} | ${moment(message.author.createdTimestamp).format('DD/MM/YYYY')}`, message.author.displayAvatarURL({dynamic: true}))
             embed.setColor('#ff0000')
             message.channel.send(embed)
             embed.fields = [];

@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const embed = new Discord.MessageEmbed();
+const moment = require('./IGNORE/moment.min.js')
 
 module.exports = {
     name: 'unlock',
@@ -17,7 +18,7 @@ module.exports = {
             ])
             embed.setTitle("🔓 Succesfully Unlocked 🔓")
             embed.setDescription(`Succesfully unlocked channel **${message.channel}**`)
-            embed.setFooter(`Unlocked by ${message.author.tag}`, message.author.displayAvatarURL({dynamic: true}))
+            embed.setFooter(`Unlocked by ${message.author.tag} | ${moment(message.createdTimestamp).format('DD/MM/YYYY')}`, message.author.displayAvatarURL({dynamic: true}))
             embed.setColor('#00ff11')
             message.channel.send(embed)
         }
