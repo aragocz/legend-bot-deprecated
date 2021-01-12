@@ -228,6 +228,14 @@ bot.on("message" , async message => {
             message.reply('You require permission `ADMINISTRATOR` to manage guild bot settings.')
         }
     }
+
+    if(cmd === `${prefix}mute`){
+        bot.commands.get('mute').execute(message, args)
+    }
+
+    if(cmd === `${prefix}unmute`){
+        bot.commands.get('unmute').execute(message, args)
+    }
 })
 
 
