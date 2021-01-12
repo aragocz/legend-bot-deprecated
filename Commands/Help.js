@@ -14,7 +14,7 @@ module.exports = {
        Hembed.setDescription('List of commands')
        Hembed.addFields(
             { name: '<:LGNDgeneral:730937158193381446> **General**' ,
-            value: '`help`,`invite`,`ping`,`prefix`,`bots`,`user-info`/`ui`,`afk`,`unafk`,`avatar`,`stats`' },
+            value: '`help`,`invite`,`ping`,`prefix`,`user-info`/`ui`,`afk`,`unafk`,`avatar`,`stats`' },
             { name: '<a:LGNDmusic:731104463598649424>**Music**' ,
             value: '*Coming soon...*'},
             { name: '<:LGNDfun:741924956241133629>**Fun**',
