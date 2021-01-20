@@ -4,19 +4,23 @@ module.exports = {
     usage: "mute (USER)",
     execute(message, args){
         const muser = message.mentions.users.first();
-        if(!args[0]){
-            message.channel.send('You must specify a user to mute!')
-        }else {
-            if(!message.mentions.members.size){
-                message.channel.send('That\'s not a valid mention!')
+        if(!message.member.hasPermission('MANAGE_CHANNELS')){
+            message.channel.send('You require permission `MANAGE_CHANNELS` to mute someone')
+        }else{
+            if(!args[0]){
+                message.channel.send('You must specify a user to mute!')
             }else {
-                message.guild.channels.cache.forEach(channel => channel.overwritePermissions([
-                    {
-                        id: `${muser.id}`,
-                        deny: ['SEND_MESSAGES']
-                    }
-                ]))
-                message.channel.send(`Succesfully muted ${muser}`)
+                if(!message.mentions.members.size){
+                    message.channel.send('That\'s not a valid mention!')
+                }else {
+                    message.guild.channels.cache.forEach(channel => channel.overwritePermissions([
+                        {
+                            id: `${muser.id}`,
+                            deny: ['SEND_MESSAGES']
+                        }
+                    ]))
+                    message.channel.send(`Succesfully muted ${muser}`)
+                }
             }
         }
     }
