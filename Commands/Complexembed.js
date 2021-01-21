@@ -19,6 +19,7 @@ let embed = new Discord.MessageEmbed();
 module.exports = {
     name: 'complexembed',
     description: "Complex Embeds",
+    usage: "complexembed",
     async execute(message, args) {
 
         const response = await getResponses(message);

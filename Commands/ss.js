@@ -3,7 +3,8 @@ const ss = new Discord.MessageEmbed();
 
 module.exports = {
     name: 'ss',
-    description: "SetStatus",
+    description: "Set current bot status, available only for bot administration team.",
+    usage: "ss (STATUS)",
     execute(message, args, bot){
         if(message.author.id === `428984613935775765` || message.author.id === `484448041609199620`){
             if(message.deletable) message.delete()

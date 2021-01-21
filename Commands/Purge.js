@@ -1,6 +1,7 @@
 module.exports = {
     name: 'purge',
     description: "Deletes 1 - 99 messages. + 1 aka the message you sent.",
+    usage: "purge (1-99)",
     execute(message, args){
         if(message.deletable) message.delete
         let amountdef = args

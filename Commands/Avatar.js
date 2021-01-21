@@ -3,7 +3,8 @@ const Aembed = new Discord.MessageEmbed();
 
 module.exports = {
     name: 'avatar',
-    description: 'Just avatar',
+    description: 'Send avatar of a user in current channel, if you don\'t mention anyone, it shows yours.',
+    usage: "avatar (USER) / avatar",
     execute(message, args){
         if(!message.mentions.users.first()){
             if(message.deletable) message.delete();

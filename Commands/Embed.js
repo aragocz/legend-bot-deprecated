@@ -5,6 +5,7 @@ const customembed = new Discord.MessageEmbed();
 module.exports = {
     name: 'embed',
     description: "Custom Embed, supports only title.",
+    usage: "embed (TEXT)",
     execute(message, args){
         const TITLE = args.join(" ");
         if(message.deletable) message.delete();

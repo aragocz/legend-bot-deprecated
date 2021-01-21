@@ -4,7 +4,8 @@ const moment = require('./IGNORE/moment.min.js')
 
 module.exports = {
     name: 'unlock',
-    description: "Unlocks Channel",
+    description: "Unlocks Current Channel",
+    usage: "unlock",
     execute(message, args){
         const everyone = message.guild.roles.cache.find(r => r.name === '@everyone')
         if(!message.member.hasPermission("MANAGE_CHANNELS" || "ADMINISTRATOR" || "MANAGE_GUILD")){

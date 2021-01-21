@@ -3,7 +3,8 @@ const embed = new Discord.MessageEmbed();
 
 module.exports = {
     name: 'lockdown',
-    description: "Locks channel",
+    description: "Locks current channel",
+    usage: "lockdown / quarantine",
     execute(message, args){
         if(message.deletable) message.delete;
         const everyone = message.guild.roles.cache.find(r => r.name === '@everyone')

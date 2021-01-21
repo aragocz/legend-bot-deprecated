@@ -1,6 +1,7 @@
 module.exports = {
     name: 'msg',
     description: "Bot sends a message.",
+    usage: "msg (TEXT)",
     execute(message, args){
         if(message.deletable) message.delete();
         const Text = args.join(" ")

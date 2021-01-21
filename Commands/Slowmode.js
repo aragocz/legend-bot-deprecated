@@ -1,6 +1,7 @@
 module.exports = {
     name: 'slowmode',
     description: "Sets room slowmode to value in seconds, write 0 to turn off.",
+    usage: "slowmode (NUMBER[In Seconds])",
     execute(message, args){
         let amount = args
         let amounts = Math.floor(amount)

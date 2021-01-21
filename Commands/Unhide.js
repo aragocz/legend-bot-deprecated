@@ -3,7 +3,8 @@ const embed = new Discord.MessageEmbed();
 
 module.exports = {
     name: 'unhide',
-    description: "Puts the channel from quarantine/finds the channel",
+    description: "Allows users to see the currents channel.",
+    usage: "unhide / unquarantine",
     execute(message, args){
         const everyone = message.guild.roles.cache.find(r => r.name === '@everyone')
         if(!message.member.hasPermission("MANAGE_CHANNELS" || "ADMINISTRATOR" || "MANAGE_GUILD")){

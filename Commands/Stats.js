@@ -5,6 +5,7 @@ const stateembed = new Discord.MessageEmbed();
 module.exports = {
     name: 'stats',
     description: "Shows server stats.",
+    usage: "stats",
     execute(message, args){
         const guildowner = message.guild.owner;
         const moment = require('./IGNORE/moment.min.js')

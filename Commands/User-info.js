@@ -5,7 +5,8 @@ const moment = require('./IGNORE/moment.min.js')
 
 module.exports = {
     name: 'user-info',
-    description: "Shows info about a user.",
+    description: "Shows info about a user, if you don't include a mention it shows yours info.",
+    usage: "ui (USER) / ui / user-info (USER) / user-info",
     execute(message, args){
         const muser = message.mentions.users.first();
         const memberuser = message.mentions.members.first();

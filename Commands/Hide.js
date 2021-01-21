@@ -3,7 +3,8 @@ const embed = new Discord.MessageEmbed();
 
 module.exports = {
     name: 'hide',
-    description: "Puts the channel in quarantine/hides the channel",
+    description: "Hides the current channel",
+    usage: "hide",
     execute(message, args){
         const everyone = message.guild.roles.cache.find(r => r.name === '@everyone')
         if(!message.member.hasPermission("MANAGE_CHANNELS" || "ADMINISTRATOR" || "MANAGE_GUILD")){
