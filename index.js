@@ -242,7 +242,7 @@ bot.on("message" , async message => {
 
 
 
-bot.login(botsettings.Token)
+bot.login(process.env.token)
 
 
 
