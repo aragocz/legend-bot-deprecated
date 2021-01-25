@@ -236,6 +236,14 @@ bot.on("message" , async message => {
     if(cmd === `${prefix}unmute`){
         bot.commands.get('unmute').execute(message, args)
     }
+
+    if(cmd === `${prefix}vm` || cmd === `${prefix}voicemute`){
+        bot.commands.get('voicemute').execute(message, args)
+    }
+
+    if(cmd === `${prefix}unvm` || cmd === `${prefix}unvoicemute`){
+        bot.commands.get('unvoicemute').execute(message, args)
+    }
 })
 
 
