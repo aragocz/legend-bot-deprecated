@@ -259,7 +259,7 @@ bot.on("message" , async message => {
             "https://media.tenor.com/images/ea1ca14e49866429e2221aab2126cdb0/tenor.gif",
             "https://gifimage.net/wp-content/uploads/2017/06/anime-hug-gif-12.gif",
             "https://media.tenor.com/images/1171c186f9130d1efa4a186ad4371e8c/tenor.gif",
-            "http://media.tenor.com/images/f08f77fc242b9a8263206caa42795d9d/tenor.gif"
+            "https://media.tenor.com/images/f08f77fc242b9a8263206caa42795d9d/tenor.gif"
         ]
         let gif = expgifs[Math.floor(Math.random() * expgifs.length)];
         embed.setTitle(`${message.author.username} hugs ${muser.username}`)
