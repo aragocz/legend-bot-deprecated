@@ -5,8 +5,9 @@ const bot = new Discord.Client
 const guild = Discord.Guild
 const prefix = botsettings.prefix;
 const db = require('quick.db');
+const { type } = require('os');
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
-const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "Furuhashi is no longer an owner, bot moved to Łegend Developers team!"
+const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "The only thing they fear, is you! | l?"
 
 
 
@@ -30,7 +31,7 @@ const botadmins = [
 
 bot.on('ready' , async () => {
     console.log(`${bot.user.username} is online!`)
-    bot.user.setActivity(`${defaultStatus}`)
+    bot.user.setActivity(`${defaultStatus}`, {type: "LISTENING"})
     //bot.user.setActivity("Made By : Furuhashi Fumino#8496 | l?" , {type: "PLAYING"})
     //bot.user.setActivity(defaultStatus)
 })  
