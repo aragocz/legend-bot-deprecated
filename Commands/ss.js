@@ -8,7 +8,7 @@ module.exports = {
     usage: "ss (STATUS)",
     execute(message, args, bot){
         if(message.author.id === `428984613935775765` || message.author.id === `484448041609199620`){
-            if(!args[0]){
+            if(args.length){
                 if(message.deletable) message.delete()
                 
                 let IDK = args.join(" ")
