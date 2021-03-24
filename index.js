@@ -31,7 +31,9 @@ const botadmins = [
 ];  
 
 bot.on('ready' , async () => {
+    const activity = db.get('Status.status')
     console.log(`${bot.user.username} is online!`)
+    bot.user.setActivity(activity)
 })  
 
 bot.on('guildMemberAdd', async member => {
