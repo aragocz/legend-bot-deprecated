@@ -9,6 +9,7 @@ const { type } = require('os');
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
 const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "The only thing they fear, is you! | l?"
 const dbStatus = db.get('Status')
+const botowner = '428984613935775765'
 
 
 
@@ -75,20 +76,32 @@ bot.on("message" , async message => {
 
     if(cmd === `${prefix}servers`){
         if(message.author.id === `428984613935775765`){
-            message.author.send('**Servers i\'m in:**')
-            bot.guilds.cache.forEach((guild) => {
-                message.author.send(`*${guild.name}*  With *${guild.memberCount}*  members`)
-            })
+            const guildcount = bot.guilds.cache.size
+            const guilds = bot.guilds.cache.map(g => '*' + g.name + '*  With  *' + g.memberCount + '*  members (' + g.id + ')' ).join('\n')
+            message.author.send('**I\'m currently in ' + guildcount + ' servers \nServers i\'m in:**\n' + guilds)
             
+            
+        }
+    }
+
+    if(cmd === `${prefix}admininv`){
+        if(message.deletable) message.delete();
+        if(!message.author.id === botowner){
+            return;
+        }else {
+            if(!args.length){
+                return;
+            }else {
+                const guildid = args;
+                const guild = bot.guilds.cache.get(guildid);
+                guild.channels.cache.first().createInvite().then(invite => message.author.send(invite.url))
+                
+            }
         }
     }
 
     if(cmd === `${prefix}prefix`){
         bot.commands.get('prefix').execute(message, args)
-    }
-
-    if(cmd === `${prefix}version`){
-        bot.commands.get('version').execute(message, args)
     }
 
     if(cmd === `${prefix}avatar`){
@@ -172,7 +185,7 @@ bot.on("message" , async message => {
         let afk = db.get(`afk_${message.author.id}`)
         db.set(`afk_${message.author.id}`,{ afk: 'afk' })
         db.set(`test_${message.author.id}`,{ afkstatus: modargs })
-        message.channel.send(`Successfully set your AFK message to \`${modargs}\`. Write ${prefix}unafk to turn of mention message!`).then(m => m.delete({timeout: 60000}))
+        message.channel.send(`Successfully set your AFK message to \`${modargs}\`. Type ${prefix}unafk to turn of your AFK status!`).then(m => m.delete({timeout: 60000}))
     }
 
     if(cmd === `${prefix}unafk`){
@@ -267,6 +280,10 @@ bot.on("message" , async message => {
         embed.setImage(gif);
 
         message.channel.send(embed)
+    }
+
+    if(cmd === `${prefix}test`){
+
     }
 })
 
