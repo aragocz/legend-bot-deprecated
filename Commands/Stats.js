@@ -29,7 +29,7 @@ module.exports = {
          },
          {
             name: '<:LGNDperson:763094200107139073>Members:' , 
-            value: `**${message.guild.memberCount}**`
+            value: `**${message.guild.memberCount} (${message.guild.members.cache.filter(m => !m.user.bot).size} without bot users)**`
          },
          {
             name: '🍰Created At:',

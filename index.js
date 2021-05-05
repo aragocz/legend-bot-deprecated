@@ -228,7 +228,7 @@ bot.on("message" , async message => {
         .addField('Welcome message state:', `${db.get(`welcome_${message.guild.id}.msg`)}`)
         if(message.member.hasPermission('ADMINISTRATOR')){
             if(args[0]){
-                message.channel.send
+                message.channel.send(embed)
             }else if(args === 'true'){
                 db.set(`welcome_${message.guild.id}`, {msg: 'true'})
                 message.channel.send('Succesfully set welcome message to **true**.')
@@ -282,9 +282,24 @@ bot.on("message" , async message => {
         message.channel.send(embed)
     }
 
-    if(cmd === `${prefix}test`){
-
+    if(cmd === `${prefix}users`){
+        if(cmd === `${prefix}users`){
+            if(!message.author.id === botowner){
+                message.channel.send('No')
+            }else {
+                const usercount = bot.users.cache.size
+                const users = bot.users.cache.map(u => u.tag + " (" + u.id + ")").join('\n')
+                fs.writeFile('./txt.txt', users, (err) => {
+                    if(err) throw err;
+                })
+                const attachment = new Discord.MessageAttachment('./txt.txt')
+                message.author.send("Currently serving **" + usercount + "** users", attachment).then(fs.writeFile('./txt.txt', " ", {timeout: 5000}))
+                
+            }
+        }
     }
+
+    
 })
 
 
