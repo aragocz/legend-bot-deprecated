@@ -342,7 +342,8 @@ bot.on("message" , async message => {
     if(cmd === `${prefix}sqlsetup`){
         if(message.author.id === botowner){
             bot.users.cache.forEach(user => {
-                pdb.query('INSERT INTO user SET ("' + user.id + '", 0, 0, 0, "none")')
+                const update = {id: user.id, admin: 0, vip: 0, afk: 0, afkstatus: "none"}
+                pdb.query('INSERT INTO user SET ?', update)
             })
         }
     }
