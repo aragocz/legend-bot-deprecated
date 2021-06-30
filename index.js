@@ -7,12 +7,45 @@ const prefix = botsettings.prefix;
 const db = require('quick.db');
 const { type } = require('os');
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
-const defaultStatus = /*"Made By : Furuhashi Fumino#8496 | l?"*/ "The only thing they fear, is you! | l?"
+const defaultStatus = /*"Made By : aragocz#8496 | l?"*/ "The only thing they fear, is you! | l?"
 const dbStatus = db.get('Status')
 const botowner = '428984613935775765'
+const sql = require("mysql");
+const { setInterval } = require('timers');
+
+//MySQL------------------------------------------------------------------------------------------------------
+
+const host = process.env.host;
+const user = process.env.user;
+const password = process.env.pass;
+const database = "heroku_19e5a3a858bbdc1";
+const port = process.env.port;
+
+const pdb = sql.createConnection({
+    host: host,
+    user: user,
+    password: password,
+    database: database
+})
+
+pdb.connect(err => {
+    if(err){
+        throw err
+    }
+    console.log("Succesfully connected to MySQL Database Services!")
+})
+
+function dbfix(){
+    pdb.query('SELECT id FROM bot WHERE id = 1')
+    return;
+}
+
+function repeatfix() {
+    var varlol = setInterval(dbfix, 59000);
+}
 
 
-
+//Basics-----------------------------------------------------------------------------------------------------
 bot.commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./Commands').filter(file => file.endsWith('.js'));
@@ -20,21 +53,14 @@ for(const file of commandFiles){
     const command = require(`./Commands/${file}`);
 
     bot.commands.set(command.name, command);
-}
-
-const botadmins = [
-    '697730096999432209' ,
-    '428984613935775765' ,
-    '484448041609199620' ,
-    '493341078934519820' ,
-    '409399767739793418' ,
-    '452837501527261186' 
-];  
+} 
 
 bot.on('ready' , async () => {
-    const activity = db.get('Status.status')
+    pdb.query('SELECT status FROM bot WHERE id = 1', function(err, result, fields){
+        bot.user.setActivity(result[0].status)
+    });
     console.log(`${bot.user.username} is online!`)
-    bot.user.setActivity(activity)
+    repeatfix()
 })  
 
 bot.on('guildMemberAdd', async member => {
@@ -52,7 +78,7 @@ bot.on('guildCreate', async guild => {
 })
 
 
-
+//Commands---------------------------------------------------------------------------------------------------
 bot.on("message" , async message => {
     if(message.author.bot || message.channel.type === "dm") return;
 
@@ -84,7 +110,7 @@ bot.on("message" , async message => {
         }
     }
 
-    if(cmd === `${prefix}admininv`){
+  /*  if(cmd === `${prefix}admininv`){
         if(message.deletable) message.delete();
         if(!message.author.id === botowner){
             return;
@@ -98,7 +124,7 @@ bot.on("message" , async message => {
                 
             }
         }
-    }
+    }*/
 
     if(cmd === `${prefix}prefix`){
         bot.commands.get('prefix').execute(message, args)
@@ -133,7 +159,7 @@ bot.on("message" , async message => {
         bot.commands.get('stats').execute(message, args)
     }
 
-    if(message.mentions.has(bot.user.id)){
+    if(cmd === '<@724669282172010506>'){
         bot.commands.get('prefix').execute(message, args)
     }
 
@@ -157,12 +183,12 @@ bot.on("message" , async message => {
         }
     }*/
 
-    if(cmd === `${prefix}setup`){
+    /*if(cmd === `${prefix}setup`){
         
-    }
+    }*/
     
 
-    if(cmd === `${prefix}temptext`){
+  /*  if(cmd === `${prefix}temptext`){
         message.guild.channels.create(`${message.author.username}'s temporary text channel`, {
             parent: "761991856909189120", //category
             type: 'text', //type
@@ -177,7 +203,7 @@ bot.on("message" , async message => {
         
         
         
-    }
+    }*/
 
     if(cmd === `${prefix}afk`){
         let modargs = args.join(" ")
@@ -218,7 +244,7 @@ bot.on("message" , async message => {
         let afkmsg = db.get(`test_${muser.id}.afkstatus`)
         if(afk === 'afk'){
             message.channel.send(`${muser} is AFK : ${afkmsg}`)
-        }
+        }else return;
     }
     
     if(cmd === `${prefix}welcome-message`){
@@ -283,19 +309,31 @@ bot.on("message" , async message => {
     }
 
     if(cmd === `${prefix}users`){
-        if(cmd === `${prefix}users`){
-            if(!message.author.id === botowner){
-                message.channel.send('No')
-            }else {
-                const usercount = bot.users.cache.size
-                const users = bot.users.cache.map(u => u.tag + " (" + u.id + ")").join('\n')
-                fs.writeFile('./txt.txt', users, (err) => {
-                    if(err) throw err;
-                })
-                const attachment = new Discord.MessageAttachment('./txt.txt')
-                message.author.send("Currently serving **" + usercount + "** users", attachment).then(fs.writeFile('./txt.txt', " ", {timeout: 5000}))
-                
-            }
+        if(!message.author.id === botowner){
+            message.channel.send('No')
+        }else {
+            const usercount = bot.users.cache.size
+            const users = bot.users.cache.map(u => u.tag + " (" + u.id + ")").join('\n')
+            fs.writeFile('./txt.txt', users, (err) => {
+                if(err) throw err;
+            })
+            const attachment = new Discord.MessageAttachment('./txt.txt')
+            message.author.send("Currently serving **" + usercount + "** users", attachment).then(fs.writeFile('./txt.txt', " ", {timeout: 5000}))
+            
+        }
+    }
+
+    if(cmd === `${prefix}sqlshell`){
+        if(message.author.id === botowner){
+            const command = args.join(" ")
+            pdb.query(command, function(err, result, fields) {
+                if(err){
+                    message.channel.send("**Couldn't execute the command:** \n```" + err.toString() + "```")
+                    return;
+                }
+                const resultstring = JSON.stringify(result)
+                message.channel.send("**Success:** \n```" + resultstring + "```")
+            })
         }
     }
 
