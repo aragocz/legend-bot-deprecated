@@ -72,9 +72,12 @@ bot.on('guildMemberAdd', async member => {
 })
 
 bot.on('guildCreate', async guild => {
-    const general = member.guild.channels.cache.find(r => r.name === 'general')
+    /*const general = member.guild.channels.cache.find(r => r.name === 'general')
     db.set(`welcome_${guild.id}`)
-    general.send('')
+    general.send('')*/
+    this.guild.members.cache.forEach(user => {
+        pdb.query('INSERT INTO user SET ("' + user.id + '", 0, 0, 0, "none")')
+    });
 })
 
 
@@ -333,6 +336,14 @@ bot.on("message" , async message => {
                 }
                 const resultstring = JSON.stringify(result)
                 message.channel.send("**Success:** \n```" + resultstring + "```")
+            })
+        }
+    }
+
+    if(cmd === `${prefix}sqlsetup`){
+        if(message.author.id === botowner){
+            bot.users.cache.forEach(user => {
+                pdb.query('INSERT INTO user SET ["' + user.id + '", 0, 0, 0, "none"')
             })
         }
     }
