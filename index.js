@@ -312,9 +312,7 @@ bot.on("message" , async message => {
     }
 
     if(cmd === `${prefix}users`){
-        if(!message.author.id === botowner){
-            message.channel.send('No')
-        }else {
+        if(message.author.id === botowner){
             const usercount = bot.users.cache.size
             const users = bot.users.cache.map(u => u.tag + " (" + u.id + ")").join('\n')
             fs.writeFile('./txt.txt', users, (err) => {
@@ -322,7 +320,8 @@ bot.on("message" , async message => {
             })
             const attachment = new Discord.MessageAttachment('./txt.txt')
             message.author.send("Currently serving **" + usercount + "** users", attachment).then(fs.writeFile('./txt.txt', " ", {timeout: 5000}))
-            
+        }else {
+            return;
         }
     }
 
