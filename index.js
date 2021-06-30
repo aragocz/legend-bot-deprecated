@@ -12,6 +12,7 @@ const dbStatus = db.get('Status')
 const botowner = '428984613935775765'
 const sql = require("mysql");
 const { setInterval } = require('timers');
+const { exec } = require('child_process');
 
 //MySQL------------------------------------------------------------------------------------------------------
 
@@ -333,17 +334,45 @@ bot.on("message" , async message => {
                     message.channel.send("**Couldn't execute the command:** \n```" + err.toString() + "```")
                     return;
                 }
-                const resultstring = JSON.stringify(result)
-                message.channel.send("**Success:** \n```" + resultstring + "```")
+                const resultstring = JSON.stringify(result, null, 2)
+                if(resultstring.length <= 4000){
+                    message.channel.send("**Success:** \n```" + resultstring + "```")
+                }else {
+                    fs.writeFile('./txt.txt', resultstring, (err) => {
+                        if(err) throw err;
+                    })
+                    const attachment = new Discord.MessageAttachment('./txt.txt')
+                    message.channel.send("**Success:**", attachment)
+                }
             })
         }
     }
 
-    if(cmd === `${prefix}sqlsetup`){
+    if(cmd === `${prefix}checkhours`){
+        exec("heroku ps -a legend-bot-official", function(err, stdout, stderr) {
+            message.channel.send("```"+stdout+"```")
+        }) 
+        
+    }
+
+    if(cmd === `${prefix}shell`){
         if(message.author.id === botowner){
-            bot.users.cache.forEach(user => {
-                const update = {id: user.id, admin: 0, vip: 0, afk: 0, afkstatus: "none"}
-                pdb.query('INSERT INTO user SET ?', update)
+            const command = args.join(" ");
+            exec(command, function(err, stdout, stderr){
+                if(err){
+                    message.channel.send("**Error:**\n```"+err+"```");
+                }
+                if(!err){
+                    if(stdout.length <= 4000){
+                        message.channel.send("**Success:**\n```"+stdout+"```")
+                    }else {
+                        fs.writeFile('./txt.txt', stdout, err => {
+                            if(err) throw err;
+                        })
+                        const attachment = new Discord.MessageAttachment('./txt.txt');
+                        message.channel.send("**Success:**", attachment);
+                    }
+                }
             })
         }
     }
