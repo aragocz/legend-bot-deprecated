@@ -12,7 +12,7 @@ module.exports = {
 
         stateembed.setTitle(`Stats of ${message.guild.name}`)
         stateembed.setColor('#FF7700')
-        stateembed.setThumbnail(`${message.guild.iconURL()}`)
+        stateembed.setThumbnail(`${message.guild.iconURL({dynamic: true})}`)
         stateembed.setFooter(`Requested by : ${message.author.tag}` , `${message.author.displayAvatarURL()}`)
         stateembed.addFields(
          {
