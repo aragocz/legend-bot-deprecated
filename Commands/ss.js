@@ -4,7 +4,7 @@ const mysql = require('mysql')
 
 const host = process.env.host;
 const user = process.env.user;
-const password = process.env.mysql-pass;
+const password = process.env.pass;
 const database = "heroku_19e5a3a858bbdc1";
 
 const pdb = mysql.createConnection({
