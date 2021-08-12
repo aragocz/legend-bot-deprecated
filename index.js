@@ -82,6 +82,12 @@ bot.on('guildCreate', async guild => {
 
 //Commands---------------------------------------------------------------------------------------------------
 bot.on("message" , async message => {
+    pdb.query('SELECT blacklisted FROM user WHERE id = ' + message.author.id, function(err, result){
+        if(result[0].blacklisted === 1){
+            message.author.send("You've been blacklisted by the bot administration team. If you believe this act was unreasonable, contact `aragocz#8496`")
+        }
+    })
+
     if(message.author.bot || message.channel.type === "dm") return;
 
     let prefix = botsettings.prefix;
@@ -349,6 +355,19 @@ bot.on("message" , async message => {
         }
     }
 
+    //4ever virgins exclusives
+    if(message.guild.id === "752968279445733416"){
+
+        if(cmd === `${prefix}unmuteme`){
+            if(message.member.voice.mute === true){
+                message.member.voice.setMute(false, "Requested unmute.");
+                message.reply("unmuted you.");
+            }else {
+                message.reply("you're not muted dumass.");
+            }
+        }
+
+    }
     
 })
 
