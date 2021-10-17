@@ -1,9 +1,9 @@
 const Discord = require('discord.js');
 const botsettings = require('./botsettings.json')
 const fs = require('fs');
-const bot = new Discord.Client
-const guild = Discord.Guild
-const prefix = botsettings.prefix;
+const intentsfile = require("./intents.json")
+const intents = intentsfile.intents
+const bot = new Discord.Client({intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_BANS, Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Discord.Intents.FLAGS.GUILD_INTEGRATIONS, Discord.Intents.FLAGS.GUILD_INVITES, Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING, Discord.Intents.FLAGS.GUILD_PRESENCES, Discord.Intents.FLAGS.GUILD_VOICE_STATES, Discord.Intents.FLAGS.GUILD_WEBHOOKS, Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING]});
 const db = require('quick.db');
 const { type } = require('os');
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
@@ -18,13 +18,12 @@ const host = process.env.host;
 const user = process.env.user;
 const password = process.env.pass;
 const database = "heroku_19e5a3a858bbdc1";
-const port = process.env.port;
 
 const pdb = sql.createConnection({
-    host: host,
-    user: user,
-    password: password,
-    database: database
+    host: "eu-cdbr-west-01.cleardb.com",
+    user: "b5d2d12a74b1ee",
+    password: "c209df9b",
+    database: "heroku_19e5a3a858bbdc1"
 })
 
 pdb.connect(err => {
@@ -60,6 +59,7 @@ bot.on('ready' , async () => {
     });
     console.log(`${bot.user.username} is online!`)
     repeatfix()
+    console.log("Running " + __filename)
 })  
 
 bot.on('guildMemberAdd', async member => {
@@ -81,9 +81,9 @@ bot.on('guildCreate', async guild => {
 
 
 //Commands---------------------------------------------------------------------------------------------------
-bot.on("message" , async message => {
+bot.on("messageCreate" , async message => {
     pdb.query('SELECT blacklisted FROM user WHERE id = ' + message.author.id, function(err, result){
-        if(result[0].blacklisted === 1){
+        if(result.blacklisted === 1){
             message.author.send("You've been blacklisted by the bot administration team. If you believe this act was unreasonable, contact `aragocz#8496`")
         }
     })
@@ -92,23 +92,23 @@ bot.on("message" , async message => {
 
     let prefix = botsettings.prefix;
     let messageArray = message.content.split(" ")
-    let cmd = messageArray [0]
-    let args = messageArray.slice(1)
+    let cmd = messageArray[0].slice(prefix.length);
+    let args = messageArray.slice(1);
     let version = botsettings.version;
     const muser = message.mentions.users.first();
 
 
     
 
-    if(cmd === `${prefix}ping`){
+    if(cmd === `ping`){
        bot.commands.get('ping').execute(message, args)
     }
 
-    if(cmd === `${prefix}invite`){
+    if(cmd === `invite`){
         bot.commands.get('invite').execute(message, args)
     }
 
-    if(cmd === `${prefix}servers`){
+    if(cmd === `servers`){
         if(message.author.id === `428984613935775765`){
             const guildcount = bot.guilds.cache.size
             const guilds = bot.guilds.cache.map(g => '*' + g.name + '*  With  *' + g.memberCount + '*  members (' + g.id + ')' ).join('\n')
@@ -118,7 +118,34 @@ bot.on("message" , async message => {
         }
     }
 
-  /*  if(cmd === `${prefix}admininv`){
+    if(cmd === "fixdbusers"){
+        if(message.author.id === botowner){
+            bot.users.cache.forEach(u => {
+                pdb.query("SELECT EXISTS(SELECT * FROM bot WHERE id = \"" + u.id + "\")", function(err, res){
+                    if(res === 0){
+                        pdb.query(`INSERT INTO bot (id, admin, vip, afk, afkstatus, blacklisted, lgnddev) VALUES (${u.id}, 0, 0, "none", 0, null)`, function(err, result){
+                            if(err){
+                                const errs = err.toString();
+                                if(errs.length <= 4000){
+                                    console.log("**Error:**\n```" + errs + "```")
+                                }else{
+                                    fs.writeFile("./txt.txt", errs)
+                                }
+                            }
+                            const resultstring = JSON.stringify(result, null, 2)
+                            if(resultstring.length <= 4000){
+                                console.log("**Success:**\n```" + resultstring + "```")
+                            }else{
+                                fs.writeFile("./txt.txt", resultstring)
+                            }
+                        })
+                    }else if(res === 1) return;
+                })
+            })
+        }else message.channel.send("no")
+    }
+
+  /*  if(cmd === `admininv`){
         if(message.deletable) message.delete();
         if(!message.author.id === botowner){
             return;
@@ -134,36 +161,31 @@ bot.on("message" , async message => {
         }
     }*/
 
-    if(cmd === `${prefix}prefix`){
+    if(cmd === `prefix`){
         bot.commands.get('prefix').execute(message, args)
     }
 
-    if(cmd === `${prefix}avatar`){
+    if(cmd === `avatar`){
         bot.commands.get('avatar').execute(message, args)
     }
-
-    if(cmd === `${prefix}bots`){
-        bot.commands.get('Bots').execute(message, args)
-    }
-
-    
-    if(cmd === `${prefix}help`){
+  
+    if(cmd === `help`){
         bot.commands.get('help').execute(message, args)
     }
 
-    if(cmd === `${prefix}user-info` || cmd === `${prefix}ui`){
+    if(cmd === `user-info` || cmd === `ui`){
         bot.commands.get('user-info').execute(message, args)
     }
 
-    if(cmd === `${prefix}embed`){
+    if(cmd === `embed`){
         bot.commands.get('embed').execute(message, args)
     }
 
-    if(cmd === `${prefix}ss`){
+    if(cmd === `ss`){
         bot.commands.get('ss').execute(message, args, bot)
     }
 
-    if(cmd === `${prefix}stats`){
+    if(cmd === `stats`){
         bot.commands.get('stats').execute(message, args)
     }
 
@@ -171,32 +193,27 @@ bot.on("message" , async message => {
         bot.commands.get('prefix').execute(message, args)
     }
 
-    if(cmd === `${prefix}purge`){
+    if(cmd === `purge`){
         bot.commands.get('purge').execute(message, args)
     }
-
-    if(cmd === `${prefix}complexembed`){
-        bot.commands.get('complexembed').execute(message, args)
-    }
     
-
-    if(cmd === `${prefix}msg`){
+    if(cmd === `msg`){
         bot.commands.get('msg').execute(message, args)
     }
 
-   /* if(cmd === `${prefix}prefixdebug`){
+   /* if(cmd === `prefixdebug`){
         if(message.member.hasPermission("ADMINISTRATOR")){
             db.set('Prefix', { Prefix: `l?`})
             message.channel.send('Done!')
         }
     }*/
 
-    /*if(cmd === `${prefix}setup`){
+    /*if(cmd === `setup`){
         
     }*/
     
 
-  /*  if(cmd === `${prefix}temptext`){
+  /*  if(cmd === `temptext`){
         message.guild.channels.create(`${message.author.username}'s temporary text channel`, {
             parent: "761991856909189120", //category
             type: 'text', //type
@@ -206,14 +223,14 @@ bot.on("message" , async message => {
                     allow: ['MANAGE_CHANNELS']
                 }
             ] 
-        }).then(ch => ch.delete({timeout: 10000}))
+        }).then(m => {setTimeout(() => m.delete(), 10000)}).catch(err => {console.log(err)});
         
         
         
         
     }*/
 
-    if(cmd === `${prefix}afk`){
+    if(cmd === `afk`){
         let modargs = args.join(" ")
         let content = db.get(`test_${message.author.id}.afkstatus`)
         let afk = db.get(`afk_${message.author.id}`)
@@ -222,28 +239,28 @@ bot.on("message" , async message => {
         message.channel.send(`Successfully set your AFK message to \`${modargs}\`. Type ${prefix}unafk to turn of your AFK status!`).then(m => m.delete({timeout: 60000}))
     }
 
-    if(cmd === `${prefix}unafk`){
+    if(cmd === `unafk`){
         db.set(`afk_${message.author.id}`,{ afk: 'notafk' })
         message.reply('Set you as not AFK!')
     }
 
-    if(cmd === `${prefix}lockdown`){
+    if(cmd === `lockdown`){
         bot.commands.get('lockdown').execute(message, args)
     }
 
-    if(cmd === `${prefix}unlock`){
+    if(cmd === `unlock`){
         bot.commands.get('unlock').execute(message, args)
     }
 
-    if(cmd === `${prefix}quarantine` || cmd === `${prefix}hide`){
+    if(cmd === `quarantine` || cmd === `hide`){
         bot.commands.get('hide').execute(message, args)
     }
 
-    if(cmd === `${prefix}unquarantine` || cmd === `${prefix}unhide`){
+    if(cmd === `unquarantine` || cmd === `unhide`){
         bot.commands.get('unhide').execute(message, args)
     }
 
-    if(cmd === `${prefix}distancing` || cmd === `${prefix}slowmode`){
+    if(cmd === `distancing` || cmd === `slowmode`){
         bot.commands.get('slowmode').execute(message, args)
     }
 
@@ -254,64 +271,32 @@ bot.on("message" , async message => {
             message.channel.send(`${muser} is AFK : ${afkmsg}`)
         }else return;
     }
-    
-    /*if(cmd === `${prefix}welcome-message`){
-        const embed = new Discord.MessageEmbed()
-        .setTitle('Welcome message')
-        .setDescription(`Add **true** or **false** statement to turn on/off welcome message.`)
-        .addField('Welcome message state:', `${db.get(`welcome_${message.guild.id}.msg`)}`)
-        if(message.member.hasPermission('ADMINISTRATOR')){
-            if(args){
-                message.channel.send(embed)
-            }else if(args === 'true'){
-                db.set(`welcome_${message.guild.id}`, {msg: 'true'})
-                message.channel.send('Succesfully set welcome message to **true**.')
-            }else if(args === 'false'){
-                db.set(`welcome_${message.guild.id}`, {msg: 'false'})
-                message.channel.send('Succesfully set welcome message to **true**.')
-            }else{
-                message.reply(`That\'s not a valid statement! write \`${prefix}welcome-message\` to show all options.`)
-            }
-        }else {
-            message.reply('You require permission `ADMINISTRATOR` to manage guild bot settings.')
-        }
-    }*/
 
-    if(cmd === `${prefix}mute`){
+    if(cmd === `mute`){
         bot.commands.get('mute').execute(message, args)
     }
 
-    if(cmd === `${prefix}unmute`){
+    if(cmd === `unmute`){
         bot.commands.get('unmute').execute(message, args)
     }
 
-    if(cmd === `${prefix}vm` || cmd === `${prefix}voicemute`){
+    if(cmd === `vm` || cmd === `voicemute`){
         bot.commands.get('voicemute').execute(message, args)
     }
 
-    if(cmd === `${prefix}unvm` || cmd === `${prefix}unvoicemute`){
+    if(cmd === `unvm` || cmd === `unvoicemute`){
         bot.commands.get('unvoicemute').execute(message, args)
     }
 
-    if(cmd === `${prefix}hug`){
-       bot.commands.get('hug').execute(message, args)
+    if(cmd === `hug`){
+       bot.commands.get('hug').execute(bot, message, args)
     }
 
-    if(cmd === `${prefix}users`){
-        if(message.author.id === botowner){
-            const usercount = bot.users.cache.size
-            const users = bot.users.cache.map(u => u.tag + " (" + u.id + ")").join('\n')
-            fs.writeFile('./txt.txt', users, (err) => {
-                if(err) throw err;
-            })
-            const attachment = new Discord.MessageAttachment('./txt.txt')
-            message.author.send("Currently serving **" + usercount + "** users", attachment).then(fs.writeFile('./txt.txt', " ", {timeout: 5000}))
-        }else {
-            return;
-        }
+    if(cmd === `users`){
+        bot.commands.get('users').execute(message, args, bot, botowner);
     }
 
-    if(cmd === `${prefix}sqlshell`){
+    if(cmd === `sqlshell`){
         if(message.author.id === botowner){
             const command = args.join(" ")
             pdb.query(command, function(err, result, fields) {
@@ -333,7 +318,7 @@ bot.on("message" , async message => {
         }
     }
 
-    if(cmd === `${prefix}shell`){
+    if(cmd === `shell`){
         if(message.author.id === botowner){
             const command = args.join(" ");
             exec(command, function(err, stdout, stderr){
@@ -358,7 +343,7 @@ bot.on("message" , async message => {
     //4ever virgins exclusives
     if(message.guild.id === "752968279445733416"){
 
-        if(cmd === `${prefix}unmuteme`){
+        if(cmd === `unmuteme`){
             if(message.member.voice.mute === true){
                 message.member.voice.setMute(false, "Requested unmute.");
                 message.reply("unmuted you.");
@@ -375,7 +360,7 @@ bot.on("message" , async message => {
 
 
 
-bot.login(process.env.token)
+bot.login(/*process.env.token*/"NzI0NjY5MjgyMTcyMDEwNTA2.XvDi3A.KzFt3ZIQira0-rrc1dZlSrOZIt0")
 
 
 
