@@ -82,7 +82,7 @@ bot.on('guildCreate', async guild => {
 
 
 //Commands---------------------------------------------------------------------------------------------------
-bot.on("messageCreate" , async message => {
+bot.on("message" , async message => {
     pdb.query('SELECT blacklisted FROM user WHERE id = ' + message.author.id, function(err, result){
         if(result.blacklisted === 1){
             message.author.send("You've been blacklisted by the bot administration team. If you believe this act was unreasonable, contact `aragocz#8496`")
