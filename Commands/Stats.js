@@ -37,7 +37,7 @@ module.exports = {
          },
          {
             name: '🧻Roles:',
-            value: `**${message.guild.roles.cache.size}**`
+            value: `**${message.guild.roles.cache.size - 1}**`
          },
          {
             name: '🏠Rooms:',
