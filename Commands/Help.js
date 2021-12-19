@@ -29,7 +29,7 @@ module.exports = {
                 )
             Hembed.setFooter(`Requested by : ${message.author.tag}` , message.author.displayAvatarURL());
 
-       message.channel.send(Hembed);
+       message.channel.send({ embeds: [Hembed]});
        Hembed.fields = [];
     }
 }

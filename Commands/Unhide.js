@@ -20,7 +20,7 @@ module.exports = {
             embed.setDescription(`Succesfully unhid channel **${message.channel}**`)
             embed.setFooter(`Unhid by ${message.author.tag}  | ${moment(message.createdTimestamp).format('DD/MM/YYYY')}`, message.author.displayAvatarURL({dynamic: true}))
             embed.setColor('#00ff00')
-            message.channel.send(embed)
+            message.channel.send({embeds: [embed]})
         }
     }
 }

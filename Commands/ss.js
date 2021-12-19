@@ -34,7 +34,7 @@ module.exports = {
 
                 console.log(`${message.author.username} set status : ${IDK}`)
 
-                message.channel.send(ss);
+                message.channel.send({embeds: [ss]});
                 ss.fields = [];
             }else {
                 pdb.query("UPDATE bot SET status = \"Made By : aragocz#8496 | l?\" WHERE id = 1")

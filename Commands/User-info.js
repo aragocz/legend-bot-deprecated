@@ -57,8 +57,7 @@ module.exports = {
             );
         }
         
-        message.channel.send(Uembed)
-        .then(m => m.delete({timeout: 60000}))
+        message.channel.send({embeds: [Uembed]}).then(m => {setTimeout(() => m.delete(), 60000)}).catch(err => {console.log(err)});
         Uembed.fields = [];
     }
 }

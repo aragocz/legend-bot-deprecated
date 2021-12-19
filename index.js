@@ -1,17 +1,16 @@
 const Discord = require('discord.js');
 const botsettings = require('./botsettings.json')
 const fs = require('fs');
-//const intentsfile = require("./intents.json")
-//const intents = intentsfile.intents
-//const bot = new Discord.Client({intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_BANS, Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Discord.Intents.FLAGS.GUILD_INTEGRATIONS, Discord.Intents.FLAGS.GUILD_INVITES, Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING, Discord.Intents.FLAGS.GUILD_PRESENCES, Discord.Intents.FLAGS.GUILD_VOICE_STATES, Discord.Intents.FLAGS.GUILD_WEBHOOKS, Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING]});
-const bot = new Discord.Client();
+const bot = new Discord.Client({intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_BANS, Discord.Intents.FLAGS.GUILD_EMOJIS_AND_STICKERS, Discord.Intents.FLAGS.GUILD_INTEGRATIONS, Discord.Intents.FLAGS.GUILD_INVITES, Discord.Intents.FLAGS.GUILD_MEMBERS, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING, Discord.Intents.FLAGS.GUILD_PRESENCES, Discord.Intents.FLAGS.GUILD_VOICE_STATES, Discord.Intents.FLAGS.GUILD_WEBHOOKS, Discord.Intents.FLAGS.DIRECT_MESSAGES, Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Discord.Intents.FLAGS.GUILD_MESSAGE_TYPING]});
+//const bot = new Discord.Client();
 const db = require('quick.db');
 const { type } = require('os');
 const randomcolor = Math.floor(Math.random() * 16777214) + 1;
-const botowner = '428984613935775765'
+const botowner = bot.users.cache.get('428984613935775765');
 const sql = require("mysql");
 const { setInterval } = require('timers');
 const { exec } = require('child_process');
+let prefix = botsettings.prefix;
 
 //MySQL------------------------------------------------------------------------------------------------------
 
@@ -19,6 +18,23 @@ const host = process.env.host;
 const user = process.env.user;
 const password = process.env.pass;
 const database = "heroku_19e5a3a858bbdc1";
+
+function handleSql(err, res){
+    if(err){
+        const errs = err.toString();
+        if(errs.length <= 4000){
+            console.log("**Error:**\n```" + errs + "```")
+        }else{
+            fs.writeFile("./txt.txt", errs)
+        }
+    }
+    const resultstring = JSON.stringify(res, null, 2)
+    if(resultstring.length <= 4000){
+        console.log("**Success:**\n```" + resultstring + "```")
+    }else{
+        fs.writeFile("./txt.txt", resultstring)
+    }
+}
 
 const pdb = sql.createConnection({
     host: "eu-cdbr-west-01.cleardb.com",
@@ -63,43 +79,45 @@ bot.on('ready' , async () => {
     console.log("Running " + __filename)
 })  
 
-bot.on('guildMemberAdd', async member => {
-    let welcome = db.get(`welcome_${member.guild.id}`)
-    if(welcome.msg === 'true'){
-        const welcome = member.guild.channels.cache.find(r => r.name === 'welcome')
-        welcome.send(`${member} Has joined !`)
-    }
-})
-
 bot.on('guildCreate', async guild => {
-    /*const general = member.guild.channels.cache.find(r => r.name === 'general')
-    db.set(`welcome_${guild.id}`)
-    general.send('')*/
     this.guild.members.cache.forEach(user => {
-        pdb.query('INSERT INTO user SET ("' + user.id + '", 0, 0, 0, "none")')
+        pdb.query(`SELECT EXIST (SELECT * FROM user WHERE id = ${user.id}`), function(err, res){
+            if(res = 1){
+                pdb.query('INSERT INTO user SET ("' + user.id + '", 0, 0, 0, "none")')
+            }
+            if(err){
+                console.log(err);
+                const errs = toString(err)
+                if(errs.length < 4000){
+                    botowner.send(errs)
+                }else {
+                    fs.writeFile("./txt.txt", errs)
+                }
+            }
+        };
     });
-})
+});
+
 
 
 //Commands---------------------------------------------------------------------------------------------------
-bot.on("message" , async message => {
-    pdb.query('SELECT blacklisted FROM user WHERE id = ' + message.author.id, function(err, result){
+bot.on("messageCreate", async message => {
+    pdb.query('SELECT blacklisted FROM user WHERE id = ' + message.author.id, function(err, result, fields){
         if(result.blacklisted === 1){
             message.author.send("You've been blacklisted by the bot administration team. If you believe this act was unreasonable, contact `aragocz#8496`")
         }
+        if(err){
+            message.channel.send(err.toString());
+        }
     })
 
-    if(message.author.bot || message.channel.type === "dm") return;
+    if(message.author.bot || message.channel.type === "dm" || !message.content.startsWith(prefix)) return;
 
-    let prefix = botsettings.prefix;
     let messageArray = message.content.split(" ")
     let cmd = messageArray[0].slice(prefix.length);
     let args = messageArray.slice(1);
     let version = botsettings.version;
     const muser = message.mentions.users.first();
-
-
-    
 
     if(cmd === `ping`){
        bot.commands.get('ping').execute(message, args)
@@ -120,26 +138,11 @@ bot.on("message" , async message => {
     }
 
     if(cmd === "fixdbusers"){
-        if(message.author.id === botowner){
+        if(message.author.id === botowner.id){
             bot.users.cache.forEach(u => {
                 pdb.query("SELECT EXISTS(SELECT * FROM bot WHERE id = \"" + u.id + "\")", function(err, res){
                     if(res === 0){
-                        pdb.query(`INSERT INTO bot (id, admin, vip, afk, afkstatus, blacklisted, lgnddev) VALUES (${u.id}, 0, 0, "none", 0, null)`, function(err, result){
-                            if(err){
-                                const errs = err.toString();
-                                if(errs.length <= 4000){
-                                    console.log("**Error:**\n```" + errs + "```")
-                                }else{
-                                    fs.writeFile("./txt.txt", errs)
-                                }
-                            }
-                            const resultstring = JSON.stringify(result, null, 2)
-                            if(resultstring.length <= 4000){
-                                console.log("**Success:**\n```" + resultstring + "```")
-                            }else{
-                                fs.writeFile("./txt.txt", resultstring)
-                            }
-                        })
+                        pdb.query(`INSERT INTO bot (id, admin, vip, afk, afkstatus, blacklisted, lgnddev) VALUES (${u.id}, 0, 0, "none", 0, null)`, handleSql)
                     }else if(res === 1) return;
                 })
             })
@@ -148,7 +151,7 @@ bot.on("message" , async message => {
 
   /*  if(cmd === `admininv`){
         if(message.deletable) message.delete();
-        if(!message.author.id === botowner){
+        if(!message.author.id === botowner.id){
             return;
         }else {
             if(!args.length){
@@ -294,11 +297,11 @@ bot.on("message" , async message => {
     }
 
     if(cmd === `users`){
-        bot.commands.get('users').execute(message, args, bot, botowner);
+        bot.commands.get('users').execute(message, args, bot, botowner.id);
     }
 
     if(cmd === `sqlshell`){
-        if(message.author.id === botowner){
+        if(message.author.id === botowner.id){
             const command = args.join(" ")
             pdb.query(command, function(err, result, fields) {
                 if(err){
@@ -320,7 +323,7 @@ bot.on("message" , async message => {
     }
 
     if(cmd === `shell`){
-        if(message.author.id === botowner){
+        if(message.author.id === botowner.id){
             const command = args.join(" ");
             exec(command, function(err, stdout, stderr){
                 if(err){

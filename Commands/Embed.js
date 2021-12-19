@@ -12,6 +12,6 @@ module.exports = {
         customembed.setTitle(TITLE)
         customembed.setColor(Math.floor(Math.random() * 16777214) + 1,);
 
-        message.channel.send(customembed);
+        message.channel.send({ embeds: [customembed]});
     }
 }

@@ -49,7 +49,7 @@ module.exports = {
          },
         )
 
-        message.channel.send(stateembed).then(m => m.delete({timeout: 60000}))
+        message.channel.send({embeds: [stateembed]}).then(m => {setTimeout(() => m.delete(), 60000)}).catch(err => {console.log(err)});
    
         stateembed.fields = [];
     }

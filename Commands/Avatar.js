@@ -12,7 +12,7 @@ module.exports = {
             Aembed.setImage(`${message.author.displayAvatarURL({dynamic: true})}?size=256`)
             Aembed.setTitle(`Your avatar`);
             Aembed.setFooter(`Requested by ${message.author.tag}`, `${message.author.displayAvatarURL({dynamic: true})}`);
-            message.channel.send(Aembed).then(m => m.delete({timeout: 60000}));
+            message.channel.send({embeds: [Aembed]}).then(m => {setTimeout(() => m.delete(), 60000)}).catch(err => {console.log(err)});
             Aembed.fields = [];
         }else{
             if(message.deletable) message.delete();
@@ -21,7 +21,7 @@ module.exports = {
             Aembed.setImage(`${User.displayAvatarURL({dynamic:true})}?size=256`)
             Aembed.setColor(`#4f0fd1`);
             Aembed.setFooter(`Requested by ${message.author.tag}`, `${message.author.displayAvatarURL({dynamic: true})}`);
-            message.channel.send(Aembed).then(m => m.delete({timeout: 60000}));
+            message.channel.send({embeds: [Aembed]}).then(m => {setTimeout(() => m.delete(), 60000)}).catch(err => {console.log(err)});
             Aembed.fields = [];
             
         }

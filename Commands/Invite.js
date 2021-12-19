@@ -11,7 +11,7 @@ module.exports = {
         .setURL('https://bit.ly/legendbot')
         .setAuthor(`Łegend` , `https://cdn.discordapp.com/attachments/725406766959165505/726044112595189851/Logo.png` , `https://bit.ly/legendbot`);
         
-        message.channel.send(Invitembed)
+        message.channel.send({embeds: [Invitembed]})
         Invitembed.fields = [];
     }
 };

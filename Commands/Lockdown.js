@@ -21,7 +21,7 @@ module.exports = {
             embed.setDescription(`Succesfully locked channel **${message.channel}**`)
             embed.setFooter(`Locked by ${message.author.tag} | ${moment(message.author.createdTimestamp).format('DD/MM/YYYY')}`, message.author.displayAvatarURL({dynamic: true}))
             embed.setColor('#ff0000')
-            message.channel.send(embed)
+            message.channel.send({embeds: [embed]})
         }
     }
 }

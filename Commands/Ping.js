@@ -10,7 +10,7 @@ module.exports = {
        .addFields({name: "My ping is:" ,
         value: `\`${Math.floor(Date.now() - message.createdTimestamp)}\`ms`});
 
-        message.channel.send(pingembed)
+        message.channel.send({embeds: [pingembed]})
         pingembed.fields = [];
     }
 }
